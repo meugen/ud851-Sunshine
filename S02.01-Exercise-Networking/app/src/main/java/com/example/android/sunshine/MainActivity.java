@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.utilities.NetworkUtils;
+import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
 
 import java.net.URL;
 
@@ -52,21 +53,25 @@ public class MainActivity extends AppCompatActivity {
 
     // COMPLETED (8) Create a method that will get the user's preferred location and execute your new AsyncTask and call it loadWeatherData
     private void loadWeatherData() {
-        final String location = SunshinePreferences.getPreferredWeatherLocation(this);
-        new TaskImpl().execute(NetworkUtils.buildUrl(location));
+        final String location = SunshinePreferences
+                .getPreferredWeatherLocation(this);
+        new TaskImpl().execute(location);
     }
 
     // COMPLETED (5) Create a class that extends AsyncTask to perform network requests
     // COMPLETED (6) Override the doInBackground method to perform your network requests
     // COMPLETED (7) Override the onPostExecute method to display the results of the network request
-    private class TaskImpl extends AsyncTask<URL, Void, String> {
+    private class TaskImpl extends AsyncTask<String, Void, String[]> {
 
         @Override
-        protected String doInBackground(final URL... urls) {
-            String result = null;
+        protected String[] doInBackground(final String... params) {
+            String[] result = null;
             try {
-                final URL url = urls[0];
-                result = NetworkUtils.getResponseFromHttpUrl(url);
+                final String location = params[0];
+                final URL url = NetworkUtils.buildUrl(location);
+                final String response = NetworkUtils.getResponseFromHttpUrl(url);
+                result = OpenWeatherJsonUtils.getSimpleWeatherStringsFromJson(
+                        MainActivity.this, response);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -74,8 +79,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(final String response) {
-            mWeatherTextView.setText(response);
+        protected void onPostExecute(final String[] response) {
+            for (String item : response) {
+                mWeatherTextView.append(item + "\n\n\n");
+            }
         }
     }
 }
