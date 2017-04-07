@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String KEY_LOCATION = "location";
+    private static final int WEATHER_LOADER_ID = 1;
 
     private RecyclerView mRecyclerView;
     private ForecastAdapter mForecastAdapter;
@@ -121,9 +122,9 @@ public class MainActivity extends AppCompatActivity
         final Bundle args = new Bundle();
         args.putString(KEY_LOCATION, location);
         if (restart) {
-            getSupportLoaderManager().restartLoader(0, args, this);
+            getSupportLoaderManager().restartLoader(WEATHER_LOADER_ID, args, this);
         } else {
-            getSupportLoaderManager().initLoader(0, args, this);
+            getSupportLoaderManager().initLoader(WEATHER_LOADER_ID, args, this);
         }
     }
 
