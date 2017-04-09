@@ -221,7 +221,17 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
             return true;
         }
 
-        // TODO (2) Launch the map when the map menu item is clicked
+        // COMPLETED (2) Launch the map when the map menu item is clicked
+        if (id == R.id.action_show_map) {
+            Uri uri = new Uri.Builder()
+                    .scheme("geo")
+                    .encodedPath("0,0")
+                    .appendQueryParameter("q", "Ukraine")
+                    .build();
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -1,7 +1,10 @@
 package com.example.android.sunshine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -12,6 +15,12 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        // TODO (2) Display the weather forecast that was passed from MainActivity
+        // COMPLETED (2) Display the weather forecast that was passed from MainActivity
+        Intent intent = getIntent();
+        if (intent.hasExtra(Intent.EXTRA_TEXT)) {
+            String weatherForDay = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+            TextView displayView = (TextView) findViewById(R.id.tv_display);
+            displayView.setText(weatherForDay + FORECAST_SHARE_HASHTAG);
+        }
     }
 }
